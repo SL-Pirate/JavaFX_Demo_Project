@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ac.iit.genericfxproj.SignUpCtrlr">
+   <children>
+      <Accordion layoutX="52.0" layoutY="46.0" prefHeight="503.0" prefWidth="688.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+        <panes>
+          <TitledPane fx:id="first_pane" animated="false" text="Personal Details">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="88.0" layoutY="24.0" text="First Name" />
+                        <Label layoutX="89.0" layoutY="72.0" text="Last Name" />
+                        <Label layoutX="89.0" layoutY="121.0" text="Age" />
+                        <Label layoutX="87.0" layoutY="164.0" text="Birthday" />
+                        <Label layoutX="89.0" layoutY="215.0" text="Gender" />
+                        <Label layoutX="88.0" layoutY="266.0" text="Civil Status" />
+                        <Label layoutX="88.0" layoutY="320.0" text="Country" />
+                        <TextField fx:id="first_name_field" layoutX="332.0" layoutY="20.0" />
+                        <TextField fx:id="last_name_field" layoutX="332.0" layoutY="68.0" />
+                        <TextField fx:id="age_field" layoutX="332.0" layoutY="117.0" />
+                        <TextField fx:id="civil_status_field" layoutX="332.0" layoutY="262.0" />
+                        <TextField fx:id="country_field" layoutX="332.0" layoutY="316.0" />
+                        <Group layoutX="339.0" layoutY="214.0">
+                           <children>
+                              <RadioButton fx:id="male_btn" mnemonicParsing="false" prefHeight="19.0" prefWidth="115.0" text="Male">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="gender" />
+                                 </toggleGroup></RadioButton>
+                              <RadioButton fx:id="female_btn" layoutX="150.0" layoutY="1.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="114.0" text="Female" toggleGroup="$gender" />
+                           </children></Group>
+                        <DatePicker fx:id="birthday_field" layoutX="332.0" layoutY="160.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="Contact Details">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="124.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+                        <Text layoutX="124.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile" />
+                        <TextField fx:id="email_field" layoutX="333.0" layoutY="100.0" />
+                        <TextField fx:id="mobile_field" layoutX="333.0" layoutY="256.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" prefHeight="142.0" prefWidth="455.0" text="Login Details">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="127.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+                        <Text layoutX="127.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+                        <Text layoutX="127.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password" />
+                        <TextField fx:id="usrname_field" layoutX="350.0" layoutY="90.0" />
+                        <PasswordField fx:id="pw_field" layoutX="350.0" layoutY="163.0" />
+                        <PasswordField fx:id="confirm_pw_field" layoutX="350.0" layoutY="249.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
+      <Button layoutX="560.0" layoutY="536.0" mnemonicParsing="false" onAction="#SignUp" text="Submit" />
+      <Button layoutX="190.0" layoutY="536.0" mnemonicParsing="false" onAction="#ClearForm" text="Clear Form" />
+      <Button layoutX="370.0" layoutY="536.0" mnemonicParsing="false" onAction="#signIn" text="Log in" />
+   </children>
+</AnchorPane>
