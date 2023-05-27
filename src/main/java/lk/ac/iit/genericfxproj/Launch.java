@@ -1,21 +1,11 @@
 package lk.ac.iit.genericfxproj;
 
-import javafx.application.Application;
-
-import javafx.scene.Scene;
-
-import javafx.scene.control.Button;
-
-import javafx.scene.layout.HBox;
-
-import javafx.stage.Stage;
-import javafx.geometry.Pos;
-
-public class Launch extends HelloApplication {
+public class Launch extends App {
 
 
     public static void main(String[] args) {
-
+        // Initialize DB
+        DB.getInstance();
 
         launch();
 

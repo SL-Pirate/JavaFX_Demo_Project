@@ -20,7 +20,7 @@ public class DB {
             statement = connection.createStatement();
             String createTableQuery = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, first_name TEXT, last_name TEXT, age INTEGER, birthday TEXT, gender TEXT, civil_status TEXT, country TEXT, email TEXT, mobile TEXT, username TEXT, password TEXT)";
             statement.execute(createTableQuery);
-            System.out.println("Table created successfully.");
+            System.out.println("Table initialized successfully.");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

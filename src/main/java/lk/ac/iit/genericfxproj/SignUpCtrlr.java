@@ -87,7 +87,7 @@ public class SignUpCtrlr implements Initializable {
 
     @FXML
     void signIn(ActionEvent event) throws IOException {
-        Scene scene = new Scene(FXMLLoader.load(HelloApplication.class.getResource("login.fxml")));
+        Scene scene = new Scene(FXMLLoader.load(App.class.getResource("login.fxml")));
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(scene);
     }
 
@@ -111,88 +111,115 @@ public class SignUpCtrlr implements Initializable {
                         )
                 )
             ) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Signing up failed!");
-                alert.setContentText("Sign Up failed. Please try again");
-
-                alert.showAndWait();
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("Signing up failed!");
+//                alert.setContentText("Sign Up failed. Please try again");
+//
+//                alert.showAndWait();
+                showAlert(Alert.AlertType.ERROR, "Signing up failed", "Signing up failed. Please try again");
             }
             else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Signe Up Successful!");
-                alert.setContentText("Successfully Signed Up. Please Log In");
-
-                alert.showAndWait();
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Signe Up Successful!");
+//                alert.setContentText("Successfully Signed Up. Please Log In");
+//
+//                alert.showAndWait();
+                showAlert(Alert.AlertType.INFORMATION, "Sign Up Successful", "Successfully Signed Up. Please Log In to continue");
 
                 signIn(event);
             }
         }
-        else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Form incomplete");
-            alert.setContentText("Please fill all fields");
-
-            alert.showAndWait();
-        }
+//        else {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("Form incomplete");
+//            alert.setContentText("Please fill all fields");
+//
+//            alert.showAndWait();
+//        }
     }
 
     private boolean allFieldsFilled () {
-        boolean allFilled = true;
+//        boolean allFilled = true;
 
+        if (first_name_field.getText().isEmpty()) {
+            showIncompleteFormAlert("first name");
+//            allFilled = false;
+            return false;
+        }
+        if (last_name_field.getText().isEmpty()) {
+            showIncompleteFormAlert("last name");
+//            allFilled = false;
+            return false;
+        }
         if (age_field.getText().isEmpty()) {
-            allFilled = false;
+            showIncompleteFormAlert("age");
+//            allFilled = false;
+            return false;
         }
         else {
             try {
                 getAge();
             }
             catch (Exception e) {
-                allFilled = false;
+                showAlert(Alert.AlertType.ERROR, "Invalid age", "The age you entered is invalid. Stop messing around");
+//                allFilled = false;
 //                e.printStackTrace();
+                return false;
             }
         }
         if (getBirthday() == null) {
-            allFilled = false;
+            showAlert(Alert.AlertType.ERROR, "Invalid birthday format", "Please try setting the birthday by using the calendar icon");
+//            allFilled = false;
+            return false;
         }
         if (civil_status_field.getText().isEmpty()) {
-            allFilled = false;
+            showIncompleteFormAlert("civil status");
+//            allFilled = false;
+            return false;
         }
 //        if (confirm_pw_field.getText().isEmpty()) {
 //            allFilled = false;
 //        }
         if (country_field.getText().isEmpty()) {
-            allFilled = false;
+            showIncompleteFormAlert("country");
+//            allFilled = false;
+            return false;
         }
         if (email_field.getText().isEmpty()) {
-            allFilled = false;
+            showIncompleteFormAlert("email");
+//            allFilled = false;
+            return false;
         }
         if (mobile_field.getText().isEmpty()) {
-            allFilled = false;
+            showIncompleteFormAlert("mobile");
+//            allFilled = false;
+            return false;
         }
-        if (first_name_field.getText().isEmpty()) {
-            allFilled = false;
-        }
-        if (last_name_field.getText().isEmpty()) {
-            allFilled = false;
+        if (usrname_field.getText().isEmpty()) {
+            showIncompleteFormAlert("username");
+//            allFilled = false;
+            return false;
         }
         if (!pw_field.getText().isEmpty()) {
             if (!pw_field.getText().equals(confirm_pw_field.getText())) {
-                allFilled = false;
+//                allFilled = false;
                 pw_field.setText("");
                 confirm_pw_field.setText("");
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Password does not match!");
-                alert.setContentText("Password does not match. Please try again");
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Password does not match!");
+//                alert.setContentText("Password does not match. Please try again");
+//
+//                alert.showAndWait();
+                showAlert(Alert.AlertType.ERROR, "Passwords mismatch", "Passwords does not match. Please try again");
 
-                alert.showAndWait();
+                return false;
             }
         }
         else {
-            allFilled = false;
-        }
-        if (usrname_field.getText().isEmpty()) {
-            allFilled = false;
+            showIncompleteFormAlert("password");
+//            allFilled = false;
+            return false;
         }
 
         // allowing option to have unspecified gender
@@ -200,7 +227,8 @@ public class SignUpCtrlr implements Initializable {
 //            allFilled = false;
 //        }
 
-        return allFilled;
+//        return allFilled;
+        return true;
     }
 
     private int getAge() {
@@ -221,5 +249,17 @@ public class SignUpCtrlr implements Initializable {
 
     LocalDate getBirthday () {
         return birthday_field.getValue();
+    }
+
+    private void showAlert (Alert.AlertType type, String title, String msg) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(msg);
+
+        alert.showAndWait();
+    }
+
+    private void showIncompleteFormAlert (String missingEntry) {
+        showAlert(Alert.AlertType.ERROR, "Form Incomplete", "Form incomplete. Please populate the " + missingEntry + " field before signing up");
     }
 }
