@@ -1,4 +1,4 @@
-package lk.ac.iit.genericfxproj;
+package lk.ac.iit.genericfxproj.controllers;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -9,6 +9,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import lk.ac.iit.genericfxproj.Launch;
+import lk.ac.iit.genericfxproj.data.Gender;
+import lk.ac.iit.genericfxproj.data.User;
+import lk.ac.iit.genericfxproj.db.DB;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -83,7 +87,7 @@ public class SignUpCtrlr implements Initializable {
 
     @FXML
     void signIn(ActionEvent event) throws IOException {
-        Scene scene = new Scene(FXMLLoader.load(App.class.getResource("login.fxml")));
+        Scene scene = new Scene(FXMLLoader.load(Launch.class.getResource("login.fxml")));
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setScene(scene);
     }
 
@@ -297,10 +301,17 @@ public class SignUpCtrlr implements Initializable {
     }
 
     private boolean validateUsrName(String usrName) {
-        return usrName.matches("/^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/");
+//        return usrName.matches("/^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/");
+        return true;
     }
 
     private  boolean validateAgeWithBirthDay (int age, LocalDate birthDay) {
-        return (age == Period.between(birthDay, LocalDate.now()).getYears());
+        boolean ageMatchesBirthday = (age == Period.between(birthDay, LocalDate.now()).getYears());
+        boolean validRange = false;
+        if (age >= 3 && age <= 90) {
+            validRange = true;
+        }
+
+        return (ageMatchesBirthday && validRange);
     }
 }

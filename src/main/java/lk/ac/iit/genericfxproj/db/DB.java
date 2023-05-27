@@ -1,11 +1,13 @@
-package lk.ac.iit.genericfxproj;
+package lk.ac.iit.genericfxproj.db;
 
 import javafx.scene.control.Alert;
+import lk.ac.iit.genericfxproj.data.User;
+
 import java.sql.*;
 
 public class DB {
-    Connection connection = null;
-    Statement statement = null;
+    private Connection connection = null;
+    private Statement statement = null;
     private static DB instance;
     private  DB () {
         try {
@@ -29,7 +31,8 @@ public class DB {
                     "country TEXT, " +
                     "email TEXT, " +
                     "mobile TEXT, " +
-                    "password TEXT" +
+                    "salt TEXT," +
+                    "hash TEXT" +
                     ")";
             statement.execute(createTableQuery);
             System.out.println("Table initialized successfully.");
@@ -48,7 +51,7 @@ public class DB {
         return instance;
     }
 
-    boolean addUser(User usr) {
+    public boolean addUser(User usr) {
         String query;
         PreparedStatement preparedStatement;
         // checking if username already exists
@@ -81,9 +84,10 @@ public class DB {
                         "email, " +
                         "mobile, " +
                         "username, " +
-                        "password" +
+                        "salt," +
+                        "hash" +
                         ") " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     preparedStatement = connection.prepareStatement(query);
                     preparedStatement.setString(1, usr.firstName);
@@ -96,7 +100,8 @@ public class DB {
                     preparedStatement.setString(8, usr.email);
                     preparedStatement.setString(9, usr.mobile);
                     preparedStatement.setString(10, usr.username);
-                    preparedStatement.setString(11, usr.password);
+                    preparedStatement.setString(11, usr.encryption.getSalt());
+                    preparedStatement.setString(12, usr.encryption.getHash());
 
                     preparedStatement.executeUpdate();
                 }
@@ -114,6 +119,30 @@ public class DB {
             return false;
         }
     }
+
+    public boolean validateCredentials (String name, String pw) {
+        String query = "SELECT * FROM users WHERE username = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String hash = resultSet.getString("hash");
+                String salt = resultSet.getString("salt");
+                String generatedHash = new Encryption(salt, pw).getHash();
+                if (hash.equals(generatedHash)) {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 
     void printDB () {
         String query = "SELECT * FROM users";
@@ -141,27 +170,6 @@ public class DB {
         catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    public boolean validateCredentials (String name, String pw) {
-        String query = "SELECT * FROM users WHERE username = ?";
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, name);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                String password = resultSet.getString("password");
-                if (password.equals(pw)) {
-                    return true;
-                }
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return false;
     }
 
     public static void main(String[] args) {

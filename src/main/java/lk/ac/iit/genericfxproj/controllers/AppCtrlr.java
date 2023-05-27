@@ -1,4 +1,4 @@
-package lk.ac.iit.genericfxproj;
+package lk.ac.iit.genericfxproj.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +9,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lk.ac.iit.genericfxproj.Launch;
+import lk.ac.iit.genericfxproj.db.DB;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -25,7 +27,7 @@ public class AppCtrlr {
         Scene scene = new Scene(
                 FXMLLoader.load(
                         Objects.requireNonNull(
-                                App.class.getResource("signup.fxml")
+                                Launch.class.getResource("signup.fxml")
                         )
                 )
         );

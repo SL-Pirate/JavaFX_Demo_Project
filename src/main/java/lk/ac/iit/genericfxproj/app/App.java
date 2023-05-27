@@ -1,9 +1,10 @@
-package lk.ac.iit.genericfxproj;
+package lk.ac.iit.genericfxproj.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lk.ac.iit.genericfxproj.Launch;
 import java.io.IOException;
 
 public class App extends Application {
@@ -12,7 +13,7 @@ public class App extends Application {
 
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Launch.class.getResource("login.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
 

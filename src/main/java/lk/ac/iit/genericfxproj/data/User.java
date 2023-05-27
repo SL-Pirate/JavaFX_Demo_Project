@@ -1,19 +1,22 @@
-package lk.ac.iit.genericfxproj;
+package lk.ac.iit.genericfxproj.data;
+
+import lk.ac.iit.genericfxproj.db.Encryption;
 
 public class User {
-    String firstName;
-    String lastName;
-    int age;
-    String birthday;
-    Gender gender;
-    String civilStatus;
-    String country;
-    String email;
-    String mobile;
-    String username;
-    String password;
+    public String firstName;
+    public String lastName;
+    public int age;
+    public String birthday;
+    public Gender gender;
+    public String civilStatus;
+    public String country;
+    public String email;
+    public String mobile;
+    public String username;
+    public String password;
+    public Encryption encryption;
 
-    User (
+    public User (
         String firstName,
         String lastName,
         int age,
@@ -37,11 +40,7 @@ public class User {
         this.mobile = mobile;
         this.username = username;
         this.password = password;
-    }
-}
 
-enum Gender {
-    Male,
-    Female,
-    Unspecified
+        encryption = new Encryption(password);
+    }
 }
