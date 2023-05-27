@@ -9,12 +9,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ResourceBundle;
-//import javafx.scene.control.ToggleGroup;
 
 public class SignUpCtrlr implements Initializable {
 
@@ -41,9 +40,6 @@ public class SignUpCtrlr implements Initializable {
 
     @FXML
     private TextField first_name_field;
-
-//    @FXML
-//    private ToggleGroup gender;
 
     @FXML
     private TextField last_name_field;
@@ -111,49 +107,44 @@ public class SignUpCtrlr implements Initializable {
                         )
                 )
             ) {
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Signing up failed!");
-//                alert.setContentText("Sign Up failed. Please try again");
-//
-//                alert.showAndWait();
-                showAlert(Alert.AlertType.ERROR, "Signing up failed", "Signing up failed. Please try again");
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Signing up failed",
+                        "Signing up failed. Please try again"
+                );
             }
             else {
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Signe Up Successful!");
-//                alert.setContentText("Successfully Signed Up. Please Log In");
-//
-//                alert.showAndWait();
-                showAlert(Alert.AlertType.INFORMATION, "Sign Up Successful", "Successfully Signed Up. Please Log In to continue");
+                showAlert(
+                        Alert.AlertType.INFORMATION,
+                        "Sign Up Successful",
+                        "Successfully Signed Up. Please Log In to continue"
+                );
 
                 signIn(event);
             }
         }
-//        else {
-//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//            alert.setTitle("Form incomplete");
-//            alert.setContentText("Please fill all fields");
-//
-//            alert.showAndWait();
-//        }
     }
 
     private boolean allFieldsFilled () {
-//        boolean allFilled = true;
 
         if (first_name_field.getText().isEmpty()) {
             showIncompleteFormAlert("first name");
-//            allFilled = false;
+            return false;
+        }
+        else if (!validateName(first_name_field.getText())) {
+            showFieldMismatchAlert("first name");
             return false;
         }
         if (last_name_field.getText().isEmpty()) {
             showIncompleteFormAlert("last name");
-//            allFilled = false;
+            return false;
+        }
+        else if (!validateName(last_name_field.getText())) {
+            showFieldMismatchAlert("last name");
             return false;
         }
         if (age_field.getText().isEmpty()) {
             showIncompleteFormAlert("age");
-//            allFilled = false;
             return false;
         }
         else {
@@ -161,73 +152,90 @@ public class SignUpCtrlr implements Initializable {
                 getAge();
             }
             catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Invalid age", "The age you entered is invalid. Stop messing around");
-//                allFilled = false;
-//                e.printStackTrace();
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Invalid age",
+                        "The age you entered is invalid. Stop messing around"
+                );
                 return false;
             }
         }
         if (getBirthday() == null) {
-            showAlert(Alert.AlertType.ERROR, "Invalid birthday format", "Please try setting the birthday by using the calendar icon");
-//            allFilled = false;
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Invalid birthday format",
+                    "Please try setting the birthday by using the calendar icon"
+            );
             return false;
         }
+        else if (!validateAgeWithBirthDay(getAge(), getBirthday())) {
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Age mismatch",
+                    "Age does not match with the birthday. Please check again"
+            );
+            return false;
+        }
+
         if (civil_status_field.getText().isEmpty()) {
             showIncompleteFormAlert("civil status");
-//            allFilled = false;
             return false;
         }
-//        if (confirm_pw_field.getText().isEmpty()) {
-//            allFilled = false;
-//        }
+        else if (!validateName(civil_status_field.getText())) {
+            showFieldMismatchAlert("civil status");
+            return false;
+        }
         if (country_field.getText().isEmpty()) {
             showIncompleteFormAlert("country");
-//            allFilled = false;
+            return false;
+        }
+        else if (!validateName(country_field.getText())) {
+            showFieldMismatchAlert("country");
             return false;
         }
         if (email_field.getText().isEmpty()) {
             showIncompleteFormAlert("email");
-//            allFilled = false;
+            return false;
+        }
+        else if (!validateEmail(email_field.getText())) {
+            showFieldMismatchAlert("email");
             return false;
         }
         if (mobile_field.getText().isEmpty()) {
             showIncompleteFormAlert("mobile");
-//            allFilled = false;
+            return false;
+        }
+        else if (!validatePhone(mobile_field.getText())) {
+            showFieldMismatchAlert("phone");
             return false;
         }
         if (usrname_field.getText().isEmpty()) {
             showIncompleteFormAlert("username");
-//            allFilled = false;
+            return false;
+        }
+        else if (!validateUsrName(usrname_field.getText())) {
+            showFieldMismatchAlert("username");
             return false;
         }
         if (!pw_field.getText().isEmpty()) {
             if (!pw_field.getText().equals(confirm_pw_field.getText())) {
-//                allFilled = false;
                 pw_field.setText("");
                 confirm_pw_field.setText("");
 
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Password does not match!");
-//                alert.setContentText("Password does not match. Please try again");
-//
-//                alert.showAndWait();
-                showAlert(Alert.AlertType.ERROR, "Passwords mismatch", "Passwords does not match. Please try again");
+                showAlert(
+                        Alert.AlertType.ERROR,
+                        "Passwords mismatch",
+                        "Passwords does not match. Please try again"
+                );
 
                 return false;
             }
         }
         else {
             showIncompleteFormAlert("password");
-//            allFilled = false;
             return false;
         }
 
-        // allowing option to have unspecified gender
-//        if (!male_btn.isSelected() && !female_btn.isSelected()) {
-//            allFilled = false;
-//        }
-
-//        return allFilled;
         return true;
     }
 
@@ -260,6 +268,39 @@ public class SignUpCtrlr implements Initializable {
     }
 
     private void showIncompleteFormAlert (String missingEntry) {
-        showAlert(Alert.AlertType.ERROR, "Form Incomplete", "Form incomplete. Please populate the " + missingEntry + " field before signing up");
+        showAlert(
+                Alert.AlertType.ERROR,
+                "Form Incomplete",
+                "Form incomplete. Please populate the " +
+                        missingEntry +
+                        " field before signing up"
+        );
+    }
+    private void showFieldMismatchAlert (String invalidEntry) {
+        showAlert(
+                Alert.AlertType.ERROR,
+                "Invalid value",
+                "Invalid " + invalidEntry
+        );
+    }
+
+    private boolean validateName (String name) {
+        return name.matches("^[^0-9]*$");
+    }
+
+    private boolean validateEmail (String email) {
+        return email.matches("^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$");
+    }
+
+    private boolean validatePhone (String phone){
+        return phone.matches("^\\+?[\\d]+$");
+    }
+
+    private boolean validateUsrName(String usrName) {
+        return usrName.matches("/^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/");
+    }
+
+    private  boolean validateAgeWithBirthDay (int age, LocalDate birthDay) {
+        return (age == Period.between(birthDay, LocalDate.now()).getYears());
     }
 }

@@ -9,8 +9,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.util.Objects;
 
 public class AppCtrlr {
 
@@ -22,7 +22,13 @@ public class AppCtrlr {
 
     @FXML
     void signUp(ActionEvent event) throws IOException {
-        Scene scene = new Scene(FXMLLoader.load(App.class.getResource("signup.fxml")));
+        Scene scene = new Scene(
+                FXMLLoader.load(
+                        Objects.requireNonNull(
+                                App.class.getResource("signup.fxml")
+                        )
+                )
+        );
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setTitle("Sign Up!");
         stage.setScene(scene);
@@ -30,21 +36,36 @@ public class AppCtrlr {
 
     @FXML
     void authenticate(ActionEvent event) {
-        if (!uname_field.getText().isEmpty() & !pw_field.getText().isEmpty() & DB.getInstance().validateCredentials(uname_field.getText(), pw_field.getText())) {
+        boolean uname_ok = !uname_field.getText().isEmpty();
+        boolean pw_ok = !pw_field.getText().isEmpty();
+        boolean credentials_match = DB.getInstance().validateCredentials(
+                uname_field.getText(),
+                pw_field.getText()
+        );
+        if (uname_ok & pw_ok & credentials_match) {
             pw_field.setText("");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Login Successful");
-            alert.setContentText("Successfully Logged in. Now go make lemon juice with it :)");
-
-            alert.showAndWait();
+            showAlert(
+                    Alert.AlertType.INFORMATION,
+                    "Login Successful",
+                    "Succesfully Logged in. Now go make lemon juice with it :)"
+            );
         }
         else {
             pw_field.setText("");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login Failed!");
-            alert.setContentText("Login Failed!\nCredentials does not match. Try again or\nJust give up already");
-            alert.showAndWait();
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Login Failed",
+                    "Login Failed!\n" +
+                            "Credentials does not match. " +
+                            "Try again or\nJust give up already"
+            );
         }
     }
 
+    private void showAlert(Alert.AlertType alertType, String title, String msg) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }

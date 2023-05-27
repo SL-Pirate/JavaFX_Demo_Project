@@ -1,7 +1,6 @@
 package lk.ac.iit.genericfxproj;
 
 import javafx.scene.control.Alert;
-
 import java.sql.*;
 
 public class DB {
@@ -18,7 +17,20 @@ public class DB {
 
             // Create a new table
             statement = connection.createStatement();
-            String createTableQuery = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, first_name TEXT, last_name TEXT, age INTEGER, birthday TEXT, gender TEXT, civil_status TEXT, country TEXT, email TEXT, mobile TEXT, username TEXT, password TEXT)";
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS users (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "username TEXT, " +
+                    "first_name TEXT, " +
+                    "last_name TEXT, " +
+                    "age INTEGER, " +
+                    "birthday TEXT, " +
+                    "gender TEXT, " +
+                    "civil_status TEXT, " +
+                    "country TEXT, " +
+                    "email TEXT, " +
+                    "mobile TEXT, " +
+                    "password TEXT" +
+                    ")";
             statement.execute(createTableQuery);
             System.out.println("Table initialized successfully.");
         } catch (ClassNotFoundException | SQLException e) {
@@ -49,14 +61,29 @@ public class DB {
             if (resultSet.next()){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Username in use");
-                alert.setContentText("Username is already in use. Please try another unique username");
+                alert.setContentText(
+                        "Username is already in use. " +
+                        "Please try another unique username"
+                );
 
                 alert.showAndWait();
                 return false;
             }
             else {
-                query = "INSERT INTO users (first_name, last_name, age, birthday, gender, civil_status, country, email, mobile, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//        System.out.println(query);
+                query = "INSERT INTO users (" +
+                        "first_name, " +
+                        "last_name, " +
+                        "age, " +
+                        "birthday, " +
+                        "gender, " +
+                        "civil_status, " +
+                        "country, " +
+                        "email, " +
+                        "mobile, " +
+                        "username, " +
+                        "password" +
+                        ") " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     preparedStatement = connection.prepareStatement(query);
                     preparedStatement.setString(1, usr.firstName);
@@ -128,9 +155,6 @@ public class DB {
                 if (password.equals(pw)) {
                     return true;
                 }
-//                else {
-//                    return  false;
-//                }
             }
         }
         catch (Exception e){
